@@ -1,0 +1,5 @@
+FROM ./Hermes-2-Pro-Mistral-7B.Q8_0.gguf
+PARAMETER num_ctx 4096
+PARAMETER stop "<|im_start|>"
+PARAMETER stop "<|im_end|>"
+PARAMETER stop "Observation:"

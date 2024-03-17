@@ -1,0 +1,11 @@
+FROM ./Hermes-2-Pro-Mistral-7B.Q8_0.gguf
+PARAMETER num_ctx 4096
+TEMPLATE """<|im_start|>system
+{{ .System }}<|im_end|>
+<|im_start|>user
+{{ .Prompt }}<|im_end|>
+<|im_start|>assistant
+"""
+PARAMETER stop "<|im_start|>"
+PARAMETER stop "<|im_end|>"
+PARAMETER stop "Observation:"
