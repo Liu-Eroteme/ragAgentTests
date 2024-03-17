@@ -8,6 +8,7 @@ from langchain.schema.runnable import RunnablePassthrough
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores.utils import filter_complex_metadata
 from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain.globals import set_verbose
 import os
 import chromadb
 
@@ -19,8 +20,8 @@ class ChatPDF:
 
     def __init__(self):
         # AB test 2 versions of modelfile
-        self.model = ChatOllama(model="hermes2pro") #with defined system prompt template
-        # self.model = ChatOllama(model="hermes2proV2") #without defined system prompt template
+        #self.model = ChatOllama(model="hermes2pro") #with defined system prompt template
+        self.model = ChatOllama(model="hermes2proV2", verbose=True) #without defined system prompt template
         
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1024, chunk_overlap=128)
         
@@ -38,12 +39,13 @@ class ChatPDF:
         )
         
         model_name = "intfloat/multilingual-e5-large"
-        model_kwargs = {'device': 'gpu'}
+        model_kwargs = {'device': 'cpu'}
         encode_kwargs = {'normalize_embeddings': False}
         self.hf = HuggingFaceEmbeddings(
             model_name=model_name,
             model_kwargs=model_kwargs,
-            encode_kwargs=encode_kwargs
+            encode_kwargs=encode_kwargs,
+            show_progress=True
         )
 
     def ingest(self):
@@ -73,8 +75,10 @@ class ChatPDF:
     def ask(self, query: str):
         if not self.chain:
             return "Please, add a PDF document first."
-
-        return self.chain.invoke(query)
+        set_verbose(True)
+        output = self.chain.invoke(query)
+        print(output)
+        return(str(output))
 
     def clear(self):
         self.vector_store = None

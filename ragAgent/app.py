@@ -1,14 +1,20 @@
 import streamlit as st
+import textwrap
 from streamlit_chat import message
 from rag import ChatPDF
 
 st.set_page_config(page_title="ChatPDF")
 
+def wrap_text(text, width=80):
+    text_without_line_breaks = text.replace('\n', ' ')
+    return textwrap.fill(text_without_line_breaks, width)
+
 
 def display_messages():
     st.subheader("Chat")
     for i, (msg, is_user) in enumerate(st.session_state["messages"]):
-        message(msg, is_user=is_user, key=str(i))
+        wrapped_msg = wrap_text(msg)  # Wrap the text
+        message(wrapped_msg, is_user=is_user, key=str(i))
     st.session_state["thinking_spinner"] = st.empty()
 
 
