@@ -64,6 +64,7 @@ For each function call return a json object with function name and arguments wit
 
 Reminder to ALWAYS respond with at least one valid <tool_call></tool_call block>!
 If you decide that no use of any above-mentioned tool is necessary, or have received all the context you need, use the "final_answer" tool to send your reply!
+However, you must NEVER use a "final_answer" and a tool call at the same time! Call your tools, wait for them to resolve, THEN call your final answer!
 It is used as follows:
 
 <tool_call>
@@ -111,7 +112,7 @@ agent_executor = AgentExecutor.from_agent_and_tools(
 )
 
 query = (
-    "this is a test. Please use your 'search_test_one' tool!"
+    "this is a test. Please try out your search_test_one, search_test_two, search_test_three tools!"
 )
 
 # Run the agent with the input
@@ -122,3 +123,7 @@ print(f"Memory content: {memory_content}")
 
 # Return the agent response and memory contents
 print(agent_response)
+
+print("FINAL AGENT RESPONSE:")
+
+print(agent_response["output"])
